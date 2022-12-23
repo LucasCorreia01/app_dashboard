@@ -11,6 +11,7 @@ class Dashboard {
     public $totalReclamacoes;
     public $totalElogios;
     public $totalSugestoes;
+    public $depesas;
 
     public function __get($attr){
         return $this->$attr;
@@ -136,7 +137,7 @@ class Bd {
         $query ='SELECT 
                     COUNT(*) as totalReclamacoes
                 from 
-                    tb_contato 
+                    tb_contatos 
                 WHERE 
                     tipo_contato = 1';
 
@@ -151,7 +152,7 @@ class Bd {
         $query ='SELECT 
                     COUNT(*) as totalElogios
                 from 
-                    tb_contato 
+                    tb_contatos 
                 WHERE 
                     tipo_contato = 2';
 
@@ -166,7 +167,7 @@ class Bd {
         $query ='SELECT 
                     COUNT(*) as totalSugestoes
                 from 
-                    tb_contato 
+                    tb_contatos 
                 WHERE 
                     tipo_contato = 3';
 
@@ -175,6 +176,22 @@ class Bd {
 
         return $stmt->fetch(PDO::FETCH_OBJ)->totalSugestoes;
 
+    }
+
+    public function getDespesas(){
+        $query = 'SELECT
+                    SUM(total) as depesas
+                from
+                    tb_despesas
+                WHERE
+                    data_despesa BETWEEN :data_inicio AND :data_fim';
+
+        $stmt = $this->conexao->prepare($query);
+        $stmt->bindValue(':data_inicio', $this->dashboard->__get('data_inicio'));
+        $stmt->bindValue(':data_fim', $this->dashboard->__get('data_fim'));
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_OBJ)->depesas;
     }
 
 }
@@ -204,8 +221,11 @@ $dashboard->__set('clientesInativos', $bd->getClientesInativos());
 $dashboard->__set('totalReclamacoes', $bd->getTotalReclamacoes());
 $dashboard->__set('totalElogios', $bd->getTotalElogios());
 $dashboard->__set('totalSugestoes', $bd->getTotalSugestoes());
+$dashboard->__set('depesas', $bd->getDespesas());
 
-print_r($dashboard);
+// echo '<pre>';
+// print_r($dashboard);
+// echo '</pre>';
 
 // echo '<pre>';
 echo json_encode($dashboard);

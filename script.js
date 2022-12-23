@@ -21,7 +21,7 @@ $(document).ready(() => {
         let competencia = $(e.target).val();
 
         $.ajax({
-            type : 'GET',
+            type : 'get',
             url : 'app.php',
             data : `competencia=${competencia}`,
             dataType : 'json',
@@ -33,8 +33,9 @@ $(document).ready(() => {
                 $('#totalReclamacoes').html(dados.totalReclamacoes);
                 $('#totalElogios').html(dados.totalElogios);
                 $('#totalSugestoes').html(dados.totalSugestoes);
+                $('#totalDespesas').html(dados.depesas);
 
-                console.log(dados);
+                // console.log(dados);
             },
             error: erro => {console.log(erro)}  
         })
