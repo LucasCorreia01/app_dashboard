@@ -14,6 +14,7 @@ $(document).ready(() => {
     })
 
 
+
     //ajax
 
     $('#competencia').on('change', function(e){
